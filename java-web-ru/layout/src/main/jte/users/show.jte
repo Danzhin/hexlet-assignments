@@ -1,12 +1,12 @@
 @import exercise.dto.users.UserPage
-@param UserPage page
+@param UserPage userPage
 
 @template.layout.page(
     content = @`
         <div>
-            <p>Имя ${page.getUser().getFirstName()}<p>
-            <p>Фамилия ${page.getUser().getLastName()}<p>
-            <p>Email $${page.getUser().getEmail()}<p>
+            <p>Имя ${userPage.getUser().getFirstName()}</p>
+            <p>Фамилия ${userPage.getUser().getLastName()}</p>
+            <p>Email ${userPage.getUser().getEmail()}</p>
         </div>
     `
 )

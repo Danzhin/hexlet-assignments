@@ -15,6 +15,7 @@ public class Data {
 
     private static long idCounter = ITEMS_COUNT;
 
+    @SuppressWarnings("deprecation")
     public static List<User> getUsers() {
         Random random = new Random(123);
         Faker faker = new Faker(new Locale("en"), random);
