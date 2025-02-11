@@ -1,7 +1,7 @@
 @template.layout.page(
     content = @`
         <div>
-            <p>Добро пожаловать!<p>
+            <p>Добро пожаловать!</p>
         </div>
     `
 )
