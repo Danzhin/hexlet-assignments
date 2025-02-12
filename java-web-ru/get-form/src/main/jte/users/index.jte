@@ -8,5 +8,8 @@
             <input type="text" name="term" placeholder="Введите имя" value="${page.getTerm()}">
             <button type="submit">Найти</button>
         </form>
+        @for(var user : page.getUsers())
+            <div>${user.getFirstName()} ${user.getLastName()}</div>
+        @endfor
     `
 )
