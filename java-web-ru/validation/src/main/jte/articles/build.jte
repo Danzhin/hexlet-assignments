@@ -16,13 +16,13 @@
       <div>
         <label>
           title
-          <input type="text" name="title" required />
+          <input type="text" name="title" value="${page.getTitle()}" required />
         </label>
       </div>
       <div>
         <label>
           content
-          <textarea name="content"></textarea required>
+          <textarea name="content" required>${page.getContent()}</textarea>
         </label>
       </div>
       <input type="submit" value="Register" />

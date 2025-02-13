@@ -37,20 +37,22 @@ public final class App {
         });
 
         app.post("/articles", ctx -> {
+            String title = ctx.formParam("title");
+            String content = ctx.formParam("content");
             try {
-                var title = ctx.formParamAsClass("title", String.class)
-                    .check(value -> value.length() >= 2, "Название статьи должно быть не короче 2 символов")
-                    .check(value -> !ArticleRepository.existsByTitle(value), "У статьи должно быть уникальное название")
+                title = ctx.formParamAsClass("title", String.class)
+                    .check(value -> value.length() >= 2, "Название не должно быть короче двух символов")
+                    .check(value -> !ArticleRepository.existsByTitle(value), "Статья с таким названием уже существует")
                     .get();
-                var content = ctx.formParamAsClass("content", String.class)
-                    .check(value -> value.length() >= 10, "Содержимое статьи должно быть не короче 10 символов")
+                content = ctx.formParamAsClass("content", String.class)
+                    .check(value -> value.length() >= 10, "Статья должна быть не короче 10 символов")
                     .get();
                 var article = new Article(title, content);
                 ArticleRepository.save(article);
                 ctx.redirect("/articles");
             } catch (ValidationException e) {
-                var page = new BuildArticlePage(e.getErrors());
-                ctx.status(422); 
+                ctx.status(422);
+                var page = new BuildArticlePage(title, content, e.getErrors());
                 ctx.render("articles/build.jte", model("page", page));
             }
         });
