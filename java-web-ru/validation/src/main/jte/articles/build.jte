@@ -11,7 +11,7 @@
     </ul>
 @endif
 
-<form action="/users" method="post">
+<form action="/articles" method="post">
     <div>
       <label>
         title
