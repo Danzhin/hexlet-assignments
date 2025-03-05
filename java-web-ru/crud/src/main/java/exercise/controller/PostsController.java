@@ -25,8 +25,8 @@ public class PostsController {
 
     public static void index(Context ctx) {
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
-        List<Post> posts = PostRepository.findAll(page - 1, PAGE_SIZE);
-        ctx.render("posts/index.jte", model("page", new PostsPage(posts)));
+        List<Post> posts = PostRepository.findAll(page, PAGE_SIZE);
+        ctx.render("posts/index.jte", model("page", new PostsPage(posts, page)));
     }
     // END
 
