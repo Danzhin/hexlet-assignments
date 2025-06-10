@@ -20,7 +20,7 @@ import exercise.exception.ResourceNotFoundException;
 
 // BEGIN
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/comments")
 public class CommentsController {
 
     @Autowired
@@ -33,20 +33,17 @@ public class CommentsController {
     };
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Comment readComment(@PathVariable Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(""));
     };
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<Comment> readComments() {
         return commentRepository.findAll();
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Comment updateComment(@PathVariable Long id, @RequestBody Comment commentData) {
         var comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(""));
@@ -56,7 +53,6 @@ public class CommentsController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Comment deleteComment(@PathVariable Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(""));
@@ -65,4 +61,5 @@ public class CommentsController {
     }
 
 }
+
 // END

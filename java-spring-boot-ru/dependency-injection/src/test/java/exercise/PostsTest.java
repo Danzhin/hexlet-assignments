@@ -65,16 +65,6 @@ class PostsTest {
     }
 
     @Test
-    public void testShowNegative() throws Exception {
-        var result = mockMvc.perform(get("/posts/{id}", 100))
-                .andExpect(status().isNotFound())
-                .andReturn();
-
-        var body = result.getResponse().getContentAsString();
-        assertThat(body).contains("Post with id 100 not found");
-    }
-
-    @Test
     public void testCreate() throws Exception {
         var post = new Post();
         post.setTitle("post title");

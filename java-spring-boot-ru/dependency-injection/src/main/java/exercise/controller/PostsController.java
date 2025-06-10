@@ -1,6 +1,9 @@
 package exercise.controller;
 
+import exercise.repository.CommentRepository;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,26 +28,27 @@ public class PostsController {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Post createPost(@RequestBody Post post) {
         return postRepository.save(post);
     }
+
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Post readPost(@PathVariable Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(""));
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<Post> readPosts() {
         return postRepository.findAll();
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Post updatePost(@PathVariable Long id, @RequestBody Post postData) {
         var post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(""));
@@ -54,14 +58,14 @@ public class PostsController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public Post deletePost(@PathVariable Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(""));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + " not found"));
         postRepository.delete(post);
+        commentRepository.deleteByPostId(id);
         return post;
     }
+
 
 }
 // END
