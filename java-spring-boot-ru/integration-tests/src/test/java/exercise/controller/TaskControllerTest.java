@@ -63,17 +63,12 @@ class TaskControllerTest {
         assertThatJson(body).isArray();
     }
 
-
     // BEGIN
     @Test
     public void testShow() throws Exception {
         var title = faker.lorem().word();
         var description = faker.lorem().sentence(3);
-        var task = Instancio.of(Task.class)
-                .ignore(Select.field(Task::getId))
-                .supply(Select.field(Task::getTitle), () -> title)
-                .supply(Select.field(Task::getDescription), () -> description)
-                .create();
+        var task = createTask(title, description);
         taskRepository.save(task);
 
         var result = mockMvc.perform(get("/tasks/" + task.getId()))
@@ -92,9 +87,7 @@ class TaskControllerTest {
     public void testCreate() throws Exception {
         var title = faker.lorem().word();
         var description = faker.lorem().sentence(3);
-        var taskData = new HashMap<>();
-        taskData.put("title", title);
-        taskData.put("description", description);
+        var taskData = createTaskData(title, description);
 
         var request = post("/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,18 +109,12 @@ class TaskControllerTest {
     public void testUpdate() throws Exception {
         var title = faker.lorem().word();
         var description = faker.lorem().sentence(3);
-        var task = Instancio.of(Task.class)
-                .ignore(Select.field(Task::getId))
-                .supply(Select.field(Task::getTitle), () -> title)
-                .supply(Select.field(Task::getDescription), () -> description)
-                .create();
+        var task = createTask(title, description);
         taskRepository.save(task);
 
         var newTitle = faker.lorem().word();
         var newDescription = faker.lorem().sentence(3);
-        var taskData = new HashMap<>();
-        taskData.put("title", newTitle);
-        taskData.put("description", newDescription);
+        var taskData = createTaskData(newTitle, newDescription);
 
         var request = put("/tasks/" + task.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -149,17 +136,28 @@ class TaskControllerTest {
     public void testDelete() throws Exception {
         var title = faker.lorem().word();
         var description = faker.lorem().sentence(3);
-        var task = Instancio.of(Task.class)
-                .ignore(Select.field(Task::getId))
-                .supply(Select.field(Task::getTitle), () -> title)
-                .supply(Select.field(Task::getDescription), () -> description)
-                .create();
+        var task = createTask(title, description);
         taskRepository.save(task);
 
         mockMvc.perform(delete("/tasks/" + task.getId()))
                 .andExpect(status().isOk());
-        
+
         assertThat(taskRepository.findById(task.getId())).isEmpty();
     }
     // END
+
+    public Task createTask(String title, String description) {
+        return Instancio.of(Task.class)
+                .ignore(Select.field(Task::getId))
+                .supply(Select.field(Task::getTitle), () -> title)
+                .supply(Select.field(Task::getDescription), () -> description)
+                .create();
+    }
+
+    public HashMap<String, String> createTaskData(String title, String description) {
+        var taskData = new HashMap<String, String>();
+        taskData.put("title", title);
+        taskData.put("description", description);
+        return taskData;
+    }
 }
